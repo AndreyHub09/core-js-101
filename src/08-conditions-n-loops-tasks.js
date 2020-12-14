@@ -355,8 +355,27 @@ function getDigitalRoot(num) {
  *   '{)' = false
  *   '{[(<{[]}>)]}' = true
  */
-function isBracketsBalanced(/* str */) {
-  throw new Error('Not implemented');
+function isBracketsBalanced(inputStr) {
+  const bracketsConfig = [['[', ']'], ['(', ')'], ['{', '}'], ['<', '>']];
+  function checkBrackets(str, index) {
+    const confElement = bracketsConfig.find((x) => x[0] === str[index] || x[1] === str[index]);
+    if (confElement === undefined || str[index] !== confElement[0] || (index + 1) >= str.length) {
+      return str;
+    }
+    if (str[index + 1] === confElement[1]) {
+      return str.substring(0, index) + str.substring(index + 2, str.length);
+    }
+    return checkBrackets(str, index + 1);
+  }
+  let resultStr = inputStr;
+  while (resultStr.length > 0) {
+    const tempStr = checkBrackets(resultStr, 0);
+    if (tempStr === resultStr && tempStr !== '') {
+      return false;
+    }
+    resultStr = tempStr;
+  }
+  return true;
 }
 
 
